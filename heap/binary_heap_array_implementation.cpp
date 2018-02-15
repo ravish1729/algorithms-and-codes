@@ -44,10 +44,12 @@ void heepify(int a[],int index,int heap_size)
 
 void extract_min(int a[],int *p)
 {if(is_empty(*p)){cout<<"underflow";return;}
- if(*p==1){--*p;}
+ if(*p==1){--*p;cout<<a[0];return;}
+ cout<<a[0];
  a[0]=a[*p-1];
  --*p;
  heepify(a,0,*p);
+ return;
 }
 
 int main()
@@ -63,12 +65,12 @@ int main()
   insert(a,heap_size,heap_capacity,key);
   heap_size++;
  }
- cout<<"heap is"<<endl;
+ //cout<<"heap is"<<endl;
  for(int i=0;i<heap_size;i++){cout<<a[i]<<" ";}
 
  //EXTRACT MIN
- extract_min(a,&heap_size);
- for(int i=0;i<heap_size;i++){cout<<a[i]<<" ";}
+ 
+ //extract_min(a,&heap_size);
 
  return 0;
 }

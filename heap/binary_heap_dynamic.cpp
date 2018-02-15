@@ -6,10 +6,10 @@ struct node
 {int value,index;
  struct node *next;
 };
-node *root;
+node *root,*end;
 
 int parent(int i)
-{i=(i%2==0)?i:i+1; 
+{i=((i%2==0)?i:i+1); 
  return ((i/2)-1);}
 
 void swap(node *b,node *c)
@@ -18,24 +18,38 @@ void swap(node *b,node *c)
  c->value=temp;
 }
 
-void heapify(node* start)
+void heapify(node* start,node* end)
 {if(start==NULL){return;}
+
  int left=2*(start->index)+1;
  int right=2*(start->index)+2;
+ //cout<<"left="<<left<<"right="<<right<<endl;
  node *p1=start,*p2=start;
- while(p1->index!=left&&p1!=NULL){p1=p1->next;}
- while(p2->index!=right&&p2!=NULL){p2=p2->next;}
-
+ //cout<<"end="<<end->index<<endl;
+ while(p1->index!=left&&(p1->next!=NULL)){p1=p1->next;}
+ while(p2->index!=right&&(p1->next!=NULL)){p2=p2->next;}
+ //cout<<"p1"<<p1->index<<"p2"<<p2->index<<endl;
+ 
  node *smallest=start;
- if ((p1->value)<(start->value) &&p1!=NULL)
+ if (((p1->value)<(smallest->value)) &&p1->index==left)
 		{smallest = p1;}
- if ((p2->value)<(smallest->value)&&p2!=NULL)
+ if (((p2->value)<(smallest->value)) &&p2->index==right)
 		{smallest = p2;}
-
+ //cout<<"small="<<smallest->value<<" "<<smallest->index<<endl;
  if(smallest!=start)
  {swap(smallest,start);
-  heapify(smallest);
+  heapify(smallest,end);
  }
+}
+
+void display()
+{node *s=root;
+ if(s==NULL){cout<<"underflow"<<endl;return;}
+ while((s->next)!=NULL)
+ {cout<<s->value<<endl;
+  s=s->next;
+ }
+ cout<<s->value<<endl;
 }
 
 void extract_min()
@@ -44,13 +58,17 @@ void extract_min()
  int val=start->value;
  if(root->next==NULL){root=NULL;cout<<"Min= "<<val<<endl;return;}
  
- root=root->next;
- while((start=start->next)!=NULL)
- {start->index=start->index-1;}
- cout<<"Min= "<<val<<endl;
- heapify(start);
- 
+ cout<<root->value<<endl;
+ (root->value)=(end->value);
+
+ while(start->next!=end){start=start->next;}
+ end=start;
+ start=root;
+ end->next=NULL;
+ heapify(start,end);
+ return;
 }
+
 
 void insert(int data)
 {struct node* temp=(struct node*)malloc(sizeof(struct node));
@@ -68,6 +86,7 @@ void insert(int data)
  pointer1->next=temp;
  temp->index=(pointer1->index)+1;
  pointer1=pointer1->next;
+ end=pointer1;
 
  while((pointer1->index)!=0)
  { 
@@ -83,15 +102,6 @@ void insert(int data)
  }	
 }
 
-void display()
-{node *start=root;
- if(start==NULL){cout<<"underflow"<<endl;return;}
- while((start->next)!=NULL)
- {cout<<start->value<<endl;
-  start=start->next;
- }
- cout<<(start->value)<<endl;
-}
 
 int main()
 {int data,i,option=0,min;
