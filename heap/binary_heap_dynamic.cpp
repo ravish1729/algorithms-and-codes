@@ -18,6 +18,8 @@ void swap(node *b,node *c)
  c->value=temp;
 }
 
+void is_empty(){if(root==NULL){cout<<"Empty";}}
+
 void heapify(node* start,node* end)
 {if(start==NULL){return;}
 
